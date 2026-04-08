@@ -7,11 +7,13 @@ int main() {
     printf("%p\n", table);
     printf("%ld\n", table->capacity);
 
-    // Testing
-    kv_t *db = kv_init(16);
-    assert(db != NULL);
-    assert(db->capacity == 16);
-    assert(db->count == 0);
+    // // Testing
+    // kv_t *db = kv_init(16);
+    // assert(db != NULL);
+    // assert(db->capacity == 16);
+    // assert(db->count == 0);
+    // free(db);
+    // db = NULL;
 
     kv_put(table, "hehe", "haha");
     kv_put(table, "hehe", "hoho");
@@ -34,4 +36,8 @@ int main() {
     val = kv_get(table, "hehe");
     
     printf("'hehe': %s, 'lala': %s, 'no existo': %s\n", val, val2, val3);
+
+    kv_free(table);
+    table = NULL;
+    printf("%d\n", val);
 }

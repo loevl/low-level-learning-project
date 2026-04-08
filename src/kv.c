@@ -23,6 +23,28 @@ kv_t *kv_init(size_t capacity) {
     return table;
 }
 
+// returns 0 on success, -1 on failure
+// user is expected to set object to NULL
+int kv_free(kv_t *db){
+    if (!db) return -1;
+
+    for (int i = 0; i < db->capacity - 1; i++){
+        kv_entry_t *e = &db->entries[i];
+
+        if (e->key && e->key != TOMBSTONE){
+            free(e->key);
+            free(e->value);
+            e->key = NULL;
+            e->value = NULL;
+            db->count--;
+        }
+    }
+
+    free(db->entries);
+    free(db);
+    return 0;
+}
+
 size_t hash(char *val, int capacity) {
     size_t hash = 0x13371337deadbeef;
     while(*val) {
@@ -57,6 +79,7 @@ int kv_put(kv_t *db, char *key, char *value) {
         if (entry->key && entry->key != TOMBSTONE && !strcmp(entry->key, key)) {
             char *newval = strdup(value);
             if (!newval) return -1;
+            free(entry->value);
             entry->value = newval;
             return real_idx;
         }
