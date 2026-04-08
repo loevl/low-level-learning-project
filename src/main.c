@@ -22,4 +22,10 @@ int main() {
             printf("[%d] %s: %s\n", i, table->entries[i].key, table->entries[i].value);
         }
     }
+
+    char *val = kv_get(table, "hehe");
+    char *val2 = kv_get(table, "lala");
+    char *val3 = kv_get(table, "this doesn't exist");
+
+    printf("%s %s %s\n", val, val2, val3);
 }
